@@ -29,7 +29,59 @@ class Controller:
         self._view.update_page()
 
     def handleStampaInfo(self, e):
-        pass
+        # PULISCO L'AREA DEI RISULTATI
+        self._view._txt_result.controls.clear()
 
+        # ARTISTA CON GRADO MAGGIORE
+        artistDegree, grado = self._model.getArtistMaxDegree()
+        self._view._txt_result.controls.append(
+            ft.Text(f"ATTORE CON GRADO MAGGIORE: {artistDegree} (grado: {grado})")
+
+        )
+
+        # ARTISTA CON SOMMA DEI PESI INCIDENTI MASSIMA
+        artistWeight, somma = self._model.getArtistMaxWeight()
+
+        self._view._txt_result.controls.append(
+            ft.Text(f"ATTORE CON SOMMA DEI PESI INCIDENTI MASSIMA: {artistWeight}(somma:{somma})")
+        )
+        self._view.update_page()
+
+        # TOP 5 ARCHI DI PESO MAGGIORE
+        topEdges = self._model.getTop5Edges()
+        self._view._txt_result.controls.append(
+            ft.Text("TOP 5 ARCHI DI PESO MAGGIORE:")
+        )
+
+        # STAMPO I 5 ARCHI con numerazione
+        for i, (artist1, artist2, data) in enumerate(topEdges, start=1):
+            self._view._txt_result.controls.append(
+                ft.Text(f"{i}. {artist1} -- {artist2}: (peso = {data['weight']})")
+            )
+
+        # Recupero dal Model l'attore più giovane e quello più anziano
+        youngest = self._model.getYoungestActor()
+        oldest = self._model.getOldestActor()
+
+        # Controllo che entrambi gli attori siano stati trovati
+        if youngest is not None and oldest is not None:
+
+            # Stampo il nome dell'attore più giovane e la sua data di nascita
+            self._view._txt_result.controls.append(
+                ft.Text(f"Attore più giovane: {youngest} (nato il {youngest.date_of_birth})")
+            )
+
+            # Stampo il nome dell'attore più anziano e la sua data di nascita
+            self._view._txt_result.controls.append(
+                ft.Text(f"Attore più anziano: {oldest} (nato il {oldest.date_of_birth})")
+            )
+
+        # Se non è possibile trovare entrambi gli attori con una data valida
+        else:
+            # Mostro un messaggio informativo, senza generare errori
+            self._view._txt_result.controls.append(
+                ft.Text("Data di nascita non disponibile per gli attori nel grafo.")
+            )
+        self._view.update_page()
     def handleTrovaGruppo(self, e):
         pass
